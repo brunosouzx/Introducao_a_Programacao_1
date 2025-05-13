@@ -21,7 +21,7 @@ print(f'{nome_completo} tem {dias_totais} dias de vida')
 print(f'{nome_completo} tem {idade_atual} anos de idade')
 
 print("")
-print("=====================================")
+print("\n=====================================\n")
 print("")
 
 #DESAFIO 2
@@ -63,7 +63,6 @@ print("")
 patrimonio_12_meses=patrimonio*(1+RENDIMENTO_MES)**12
 rendimento_total = patrimonio_12_meses - patrimonio
 
-print((1+RENDIMENTO_MES)**12)
 print(f'Se {nome_completo} não investir nada, após 12 meses o seu patrimônio terá rendido R${rendimento_total} e será R${patrimonio_12_meses}')
 
 
