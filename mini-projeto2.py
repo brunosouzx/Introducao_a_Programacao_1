@@ -80,3 +80,54 @@ print(f'{antonieta.nome} tem {antonieta.financas.salario} de salário')
 print(f'{antonieta.nome} tem {gastos_totais} de gastos')
 print(f'{antonieta.nome} tem {antonieta.financas.investimento} \
 de investimento')
+
+
+# Parte 3
+
+YELLOW = '\u001b[33m'
+RESET = '\033[0m'
+GREEN = '\033[32m'
+
+print('Agora sim, vamos pensar no futuro! Você tem um próximo objetivo'
+      ' financeiro?')
+
+print('Um desejo de adquirir ou realizar algo que você quer'
+      ' e que precisa de investimento?')
+
+print('Exemplo de objetivos assim são:')
+
+print('Comprar uma moto ou um carro, fazer uma viagem, comprar uma casa, '
+      'fazer um curso, etc')
+
+objetivo_financeiro = input(
+    f'Qual seria esse seu próximo {YELLOW} objetivo {RESET} financeiro: '
+)
+
+vl_objetivo_financeiro = float(input(
+    f'Qual seria o valor do {YELLOW} objetivo {RESET} financeiro: R$ '
+))
+
+print('Em uma conta que eu fiz aqui, sem considerar rendimentos ou inflação, ')
+
+print(f'com base na sua capacidade de investimento mensal de: \
+{GREEN}R$ {antonieta.financas.investimento}{RESET}')
+
+print(
+    f'e o seu patrimônio atual de {GREEN}R$: {antonieta.financas.patrimonio}\
+        {RESET}'
+)
+
+print(f'Você conseguiria atingir o valor de {GREEN}\
+R$ {vl_objetivo_financeiro}\
+{RESET} em: ')
+
+tempo_em_meses = (vl_objetivo_financeiro - antonieta.financas.patrimonio
+                  )/antonieta.financas.investimento
+print(f'{tempo_em_meses} meses')
+
+tempo_em_anos = tempo_em_meses/12
+
+print(f'{tempo_em_anos} anos')
+
+print('Por hora é isso que tenho para te ajudar \n'
+      'Espero que tenha sido útil')
