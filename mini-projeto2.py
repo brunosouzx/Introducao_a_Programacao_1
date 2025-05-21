@@ -105,7 +105,7 @@ nascimento = Data(dia, mes, ano)
 
 gastos = Gastos(aluguel, feira, comida, transporte, outros)
 
-financas = Financas(patrimonio=patrimonio, salario=salario,gastos=gastos, investimento=800)
+financas = Financas(patrimonio=patrimonio, salario=salario,gastos=gastos, investimento=investimento)
 
 antonieta = Pessoa(nome,nascimento=nascimento, financas=financas)
 
