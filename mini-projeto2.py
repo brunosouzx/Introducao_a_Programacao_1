@@ -5,6 +5,7 @@ RESET = '\033[0m'
 GREEN = '\033[32m'
 BLUE = '\033[34m'
 
+
 class Data:
     def __init__(self, dia, mes, ano):
         self.dia = dia
@@ -119,7 +120,7 @@ nascimento = Data(dia, mes, ano)
 gastos = Gastos(aluguel, feira, comida, transporte, outros)
 
 financas = Financas(patrimonio=patrimonio, salario=salario,
-                    gastos=gastos, investimento=800)
+                    gastos=gastos, investimento=investimento)
 
 antonieta = Pessoa(nome, nascimento=nascimento, financas=financas)
 
