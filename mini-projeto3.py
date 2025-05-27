@@ -98,7 +98,8 @@ while True:
 
     rendimento_mensal_porcentagem = rendimento_mensal_decimal * 100
 
-    if tipo_investimento != "D" or "d":
+    if tipo_investimento.upper() != "D":
+        print(tipo_investimento)
         print(
             f"Como você escolheu {B}CDB{r} vou te lembrar as taxas regressivas de IR(Imposto de Renda):")
         sleep(tempo_curto)
@@ -120,7 +121,7 @@ while True:
     # ===== CALCULO =====
 
     #   imposto de renda
-    if tipo_investimento != "D" or "d":
+    if tipo_investimento.upper() != "D":
         if tempo_investimento < 6:
             valor_IR = 22.5
         elif tempo_investimento < 12:
@@ -173,17 +174,27 @@ while True:
     if x.upper() == "N":
         break
 
+    taxa_poupanca_mensal = 0.005
+
+    montante_poupanca = valor_investido * \
+        (1 + taxa_poupanca_mensal) ** tempo_investimento
+
+    lucro_total_poupanca = montante_poupanca - valor_investido
+
+    diferenca_lucro_poupanca = lucro_total - lucro_total_poupanca
+
     print("ANÁLISES POUPANÇA")
     sleep(tempo_curto)
-    print(f'Se você tivesse investido: {G}R$ :.2f{r}')
+    print(f'Se você tivesse investido: {G}R${valor_investido:.2f}{r}')
     sleep(tempo_curto)
-    print(f'na poupança, ao final dos: {B}{tempo_investimento}{r}')
+    print(f'na poupança, ao final dos: {B}{tempo_investimento} meses{r}')
     sleep(tempo_curto)
-    print(f'o valor resgatado seria:.. {G}R$ :.2f')
+    print(f'o valor resgatado seria:.. {G}R$ {montante_poupanca:.2f}{r}')
     sleep(tempo_curto)
-    print(f'e o lucro total:.......... {G}R$ :.2f{r}')
+    print(f'e o lucro total:.......... {G}R$ {lucro_total_poupanca:.2f}{r}')
     sleep(tempo_curto)
-    print(f'A diferença de lucro é de: {G}R$ :.2f{r}')
+    print(
+        f'A diferença de lucro é de: {G}R$ {diferenca_lucro_poupanca:.2f}{r}')
     sleep(tempo_longo)
 
     print("ANÁLISE DE INFLAÇÃO")
@@ -196,7 +207,7 @@ while True:
         f'Por exemplo, se você comprava algo por:............. {G}R$ {valor_investido:.2f}{r}')
     sleep(tempo_curto)
     print(
-        f'o mesmo item custaria corrigido pela inflaçãp será:. {G}R$ :.2f{r}')
+        f'o mesmo item custaria corrigido pela inflação será:. {G}R$ :.2f{r}')
     sleep(tempo_curto)
     print(
         f'O resgate proporcionalmente ao valor corrigido fica: {G}R$ :.2f{r}')
