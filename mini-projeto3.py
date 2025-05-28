@@ -84,13 +84,13 @@ while True:
 
     rendimento_anual = 0
     if tipo_investimento.upper() == "A":
-        rendimento_anual = 14.65
+        rendimento_anual = CDI
     elif tipo_investimento.upper() == "B":
-        rendimento_anual = 16.12
+        rendimento_anual = CDI * 1.1
     elif tipo_investimento.upper() == "C":
-        rendimento_anual = 17.58
+        rendimento_anual = CDI * 1.2
     else:
-        rendimento_anual = 13.92
+        rendimento_anual = CDI * 0.95
 
     rendimento_anual_decimal = rendimento_anual / 100
 
@@ -136,10 +136,11 @@ while True:
     print("TAXAS UTILIZADAS")
     sleep(tempo_curto)
     print(f'- Taxa de IR aplicada:...... {P}{valor_IR:.2f}%{r}')
-    print(f'- Taxa de rendimento anual:. {P}{rendimento_anual}%{r}')
+    print(f'- Taxa de rendimento anual:. {P}{rendimento_anual:.2f}%{r}')
     print(
         f'- Taxa de rendimento mensal {P}{rendimento_mensal_porcentagem:.2f}%{r}'
     )
+    print('\n')
 
     montante = valor_investido * \
         (1 + rendimento_mensal_decimal) ** tempo_investimento
@@ -152,29 +153,7 @@ while True:
 
     lucro_total = resgate_liquido - valor_investido
 
-    print("RESULTADO")
-    sleep(tempo_curto)
-    print(f'Valor investido:...... {G}R$ {valor_investido:.2f}{r}')
-    sleep(tempo_curto)
-    print(f'Remendo pelo tempo de: {B}{tempo_investimento} meses{r}')
-    sleep(tempo_curto)
-    print(f'Dedução de IR de:..... {P}{valor_IR:.2f}%{r}')
-    # trocar valor_IR pela variavel ou formar a variavel com esse nome
-    sleep(tempo_curto)
-    print(f'Valor deduzido é de:.. {G}R$ {imposto_de_renda_deduzido:.2f} {r}')
-    sleep(tempo_curto)
-    print(f'O resgate será de:.... {G}R$ {resgate_liquido:.2f} {r}')
-    sleep(tempo_curto)
-    print(f'O lucro total será:... {G}R$ {lucro_total:.2f} {r}')
-    sleep(tempo_longo)
-
-    x = input(f"{i}Você gostaria de ver algumas análises adicionais (s/n)?{r} ")
-    sleep(tempo_longo)
-
-    if x.upper() == "N":
-        break
-
-    taxa_poupanca_mensal = 0.005
+    taxa_poupanca_mensal = (POUPANCA/100)/12
 
     montante_poupanca = valor_investido * \
         (1 + taxa_poupanca_mensal) ** tempo_investimento
@@ -183,6 +162,59 @@ while True:
 
     diferenca_lucro_poupanca = lucro_total - lucro_total_poupanca
 
+    taxa_inflacao_anual = 5.53/100
+
+    taxa_inflacao_mensal = taxa_inflacao_anual/12
+
+    inflacao_acumulada = (1 + taxa_inflacao_mensal) ** tempo_investimento
+
+    inflacao_acumulada_porcentagem = inflacao_acumulada*100
+
+    valor_corrigido = valor_investido * inflacao_acumulada
+
+    desvalorizacao = (1 / inflacao_acumulada) * 100
+
+    resgate_proporcional = resgate_liquido / inflacao_acumulada
+
+    poupanca_proporcional = montante_poupanca / inflacao_acumulada
+
+    print("RESULTADO")
+    sleep(tempo_curto)
+    print(f'Valor investido:...... {G}R$ {valor_investido:.2f}{r}')
+    sleep(tempo_curto)
+    print(f'Remendo pelo tempo de: {B}{tempo_investimento} meses{r}')
+    sleep(tempo_curto)
+    print(f'Dedução de IR de:..... {P}{valor_IR:.2f}%{r}')
+    sleep(tempo_curto)
+    print(f'Valor deduzido é de:.. {G}R$ {imposto_de_renda_deduzido:.2f} {r}')
+    sleep(tempo_curto)
+    print(f'O resgate será de:.... {G}R$ {resgate_liquido:.2f} {r}')
+    sleep(tempo_curto)
+    print(f'O lucro total será:... {G}R$ {lucro_total:.2f} {r}')
+    sleep(tempo_longo)
+
+    analises_adicionais = input(
+        f"{i}Você gostaria de ver algumas análises adicionais (sim/não)?{r} ")
+    sleep(tempo_longo)
+
+    if analises_adicionais.upper() == "NÃO":
+        print('\n')
+        print("RESUMO")
+        sleep(tempo_curto)
+        print(f'Valor investido:..... {G}R${valor_investido:.2f}{r}')
+        sleep(tempo_curto)
+        print(f'Valor resgatado:..... {G}R$ {resgate_liquido:.2f}{r}')
+        sleep(tempo_curto)
+        print(f'Se fosse na poupança: {G}R$ {montante_poupanca:.2f}{r}')
+        sleep(tempo_curto)
+        print(f'Correção da inflação: {G}R$ {valor_corrigido:.2f}{r}')
+        sleep(tempo_longo)
+
+        print('\n')
+        print(f'{i}Espero ter ajudado!')
+        break
+
+    print('\n')
     print("ANÁLISES POUPANÇA")
     sleep(tempo_curto)
     print(f'Se você tivesse investido: {G}R${valor_investido:.2f}{r}')
@@ -197,34 +229,39 @@ while True:
         f'A diferença de lucro é de: {G}R$ {diferenca_lucro_poupanca:.2f}{r}')
     sleep(tempo_longo)
 
+    print('\n')
     print("ANÁLISE DE INFLAÇÃO")
     sleep(tempo_curto)
-    print(f'A inflação acumulada foi de:........................ {P}%{r}')
+    print(
+        f'A inflação acumulada foi de:........................ {P}{inflacao_acumulada_porcentagem:.2f}%{r}'
+    )
     sleep(tempo_curto)
-    print(f'resultado em uma desvalorização de :................ {P}%{r}')
+    print(
+        f'resultando em uma desvalorização de :................ {P}{desvalorizacao:.2f}%{r}')
     sleep(tempo_curto)
     print(
         f'Por exemplo, se você comprava algo por:............. {G}R$ {valor_investido:.2f}{r}')
     sleep(tempo_curto)
     print(
-        f'o mesmo item custaria corrigido pela inflação será:. {G}R$ :.2f{r}')
+        f'o mesmo item custaria corrigido pela inflação será:. {G}R$ {valor_corrigido:.2f}{r}')
     sleep(tempo_curto)
     print(
-        f'O resgate proporcionalmente ao valor corrigido fica: {G}R$ :.2f{r}')
+        f'O resgate proporcionalmente ao valor corrigido fica: {G}R$ {resgate_proporcional:.2f}{r}')
     sleep(tempo_curto)
     print(
-        f'Já na poupança o proporcional a essa correção seria: {G}R$ :.2f{r}')
+        f'Já na poupança o proporcional a essa correção seria: {G}R$ {poupanca_proporcional:.2f}{r}')
     sleep(tempo_longo)
 
+    print('\n')
     print("RESUMO")
     sleep(tempo_curto)
-    print(f'Valor investido:..... {G}R$ :.2f{r}')
+    print(f'Valor investido:..... {G}R${valor_investido:.2f}{r}')
     sleep(tempo_curto)
-    print(f'Valor resgatado:..... {G}R$ :.2f{r}')
+    print(f'Valor resgatado:..... {G}R$ {resgate_liquido:.2f}{r}')
     sleep(tempo_curto)
-    print(f'Se fosse na poupança: {G}R$ :.2f{r}')
+    print(f'Se fosse na poupança: {G}R$ {montante_poupanca:.2f}{r}')
     sleep(tempo_curto)
-    print(f'Correção da inflação: {G}R$ :.2f{r}')
+    print(f'Correção da inflação: {G}R$ {valor_corrigido:.2f}{r}')
     sleep(tempo_longo)
 
     print(f'{i}Espero ter ajudado!')
