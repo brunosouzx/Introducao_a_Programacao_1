@@ -5,33 +5,76 @@ from time import sleep
 
 i = '\033[3m'  # Itálico
 r = '\033[0m'  # Resetar
+G = '\033[32m'  # Verde
 B = '\033[34m'  # Azul
+Y = '\033[33m'  # Amarelo
+P = '\033[35m'  # Roxo
 
+CDI = 14.65
 # =====[ Tempo ]=====
 tempo_longo = 1.0
 tempo_curto = 0.5
 
+meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho",
+         "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
+
+mes_atual = 3
+ano_atual = 2025
 
 class Investimento():
     def __init__(self, percentual, aporte_inicial, recorrente):
         self.percentual = percentual
         self.aporte_inicial = aporte_inicial
         self.recorrente = recorrente
+        self.investido = 0.0
+        self.total = 0.0
 
     def total_investido(self):
         if self.recorrente:
-            # Vai lá Bruno
-            pass
+            self.investido += self.aporte_inicial
         else:
-            return self.aporte_inicial
+            self.investido = self.aporte_inicial
+        
+        taxa_anual = (CDI*(self.percentual/100))/100
+        taxa_mensal = (taxa_anual + 1) ** (1/12) - 1
 
-    def resgate(self):
-        # Vai lá Bruno
-        pass
+        if self.recorrente :
+            
+            if self.total ==0.0:
+                rendimento_bruto = self.aporte_inicial * taxa_mensal
+                valor_final = self.aporte_inicial + rendimento_bruto
+                self.total=valor_final
+            else:
+                periodo_novo=self.aporte_inicial+self.total
+                rendimento_bruto = periodo_novo * taxa_mensal
+                valor_final = periodo_novo + rendimento_bruto
+                self.total=valor_final
+        else:    
+            if self.total ==0.0:
+                rendimento_bruto = self.aporte_inicial * taxa_mensal
+                valor_final = self.aporte_inicial + rendimento_bruto
+                self.total=valor_final
+            else:
+                rendimento_bruto = self.total * taxa_mensal
+                valor_final = self.total + rendimento_bruto
+                self.total=valor_final
+            
+
 
     def __str__(self):
-        return f'aporte = {self.aporte_inicial},  percentual = {self.percentual}, recorrente = {self.recorrente}, total = {self.total_investido()}'
+        tipo = "[R]" if self.recorrente else "[U]"
+        cifroes = int(self.total // 1000)
+        return f'{tipo}[LCI de {self.percentual:.2f} do CDI% {Y}R${self.investido:.2f}{r}, {G}R$ {self.total:.2f}{r}]   \t\t{G}{"$"*cifroes}{r}'
+        
+def avancar_mes():
+    global ano_atual 
+    global mes_atual
+    mes_atual += 1
+    if mes_atual == 12:
+        ano_atual += 1
+        mes_atual = 0
 
+system('cls')
 
 primeira_resposta = ''
 
@@ -89,10 +132,13 @@ while True:
         system('cls')
 
     elif primeira_resposta == '':
-        # Vai lá Bruno
-        print('Teste ENTER')
+        
+        for investimento in investimentos:
+            investimento.total_investido()
+            print(investimento)
+        avancar_mes()
+
+        
 
 
-# Testando a classe
-for investimento in investimentos:
-    print(investimento)
+        print(f'resumo da simulação em {P}{meses[mes_atual]} de {ano_atual}{r}')
