@@ -142,3 +142,4 @@ while True:
 
 
         print(f'resumo da simulação em {P}{meses[mes_atual]} de {ano_atual}{r}')
+        print("\n...\n")
