@@ -40,11 +40,11 @@ def simular_empresa(empresa: Empresa):
 
 def ajustar_estoque_e_preco(empresa: Empresa):
     """Ao final do mês, a empresa ajusta sua estratégia com base nas vendas."""
-    # Se vendeu todo o estoque (oferta zerou), aumenta reposição e margem 
+    
     if (empresa.vendas + empresa.oferta) > 0 and empresa.oferta == 0:
         empresa.reposicao += 1
         empresa.margem += 0.01
-    # Se sobraram 10 ou mais produtos, diminui reposição e margem 
+    
     elif empresa.oferta >= 10:
         empresa.reposicao = max(1, empresa.reposicao - 1)
         empresa.margem = max(0.01, empresa.margem - 0.01)
@@ -52,27 +52,27 @@ def ajustar_estoque_e_preco(empresa: Empresa):
 def simular_pessoa(pessoa: Pessoa, empresas: list, categorias: list, percentuais: list):
     """Simula as decisões de compra de uma pessoa para um mês."""
     pessoa.conforto = 0
-    rendimento_mensal = pessoa.salario + (pessoa.patrimonio * 0.05) #[cite: 6]
-    pessoa.patrimonio += rendimento_mensal  # Dinheiro do mês entra no patrimônio total
+    rendimento_mensal = pessoa.salario + (pessoa.patrimonio * 0.05) 
+    pessoa.patrimonio += rendimento_mensal  
 
     for i in range(len(categorias)):
         categoria = categorias[i]
         percentual = percentuais[i]
-        valor_para_compra = rendimento_mensal * percentual #[cite: 6]
+        valor_para_compra = rendimento_mensal * percentual 
 
-        # Pessoa busca o produto de maior qualidade dentro do seu orçamento para a categoria 
+        
         produtos_acessiveis = [e for e in empresas if e.categoria == categoria and e.oferta > 0 and get_price(e) <= valor_para_compra]
 
         produto_a_comprar = None
         if produtos_acessiveis:
             produto_a_comprar = encontra_melhor_produto(produtos_acessiveis)
         else:
-            # Se não pode pagar nenhum com o rendimento, usa o patrimônio para comprar o mais barato possível na categoria 
+           
             estoque_na_categoria = [e for e in empresas if e.categoria == categoria and e.oferta > 0]
             if estoque_na_categoria:
                 produto_a_comprar = min(estoque_na_categoria, key=get_price)
         
-        # Efetiva a compra se um produto foi escolhido e a pessoa tem patrimônio para pagar
+        
         if produto_a_comprar and pessoa.patrimonio >= get_price(produto_a_comprar):
             compra(produto_a_comprar, pessoa)
 
@@ -96,43 +96,16 @@ def encontra_melhor_produto(produtos_acessiveis: list):
 
 def simular_mercado(pessoas, empresas, categorias, percentuais):
     """Executa um ciclo completo de simulação de mercado para um mês."""
-    # 1. Empresas se preparam para o mês 
+    
     for empresa in empresas:
         simular_empresa(empresa)
-    # 2. Pessoas fazem suas compras 
+    
     for pessoa in pessoas:
         simular_pessoa(pessoa, empresas, categorias, percentuais)
-    # 3. Empresas ajustam suas estratégias para o próximo mês
+ 
     for empresa in empresas:
         ajustar_estoque_e_preco(empresa)
 
-# --- Código Adicionado: Funções de Exibição na Tela ---
-'''
-def print_pessoas(pessoas):
-    print("\n[PESSOAS]")
-    print(f"{Cores.ITALICO}Divisão da renda mensal | Moradia {Cores.AMARELO}35.0% {Cores.RESET}{Cores.ITALICO}| Alimentação {Cores.AMARELO}25.0%{Cores.RESET}{Cores.ITALICO} | Transporte {Cores.AMARELO}10.0%{Cores.RESET}{Cores.ITALICO} | Saúde {Cores.AMARELO}10.0%{Cores.RESET}{Cores.ITALICO} | Educação {Cores.AMARELO}10.0%{Cores.RESET}{Cores.ITALICO} | Totalizando {Cores.AMARELO}90.0%{Cores.RESET}{Cores.ITALICO} da renda mensal total.")
-    print(f"Gráfico de Barras | Legenda: {Cores.AZUL}Conforto{Cores.RESET}, {Cores.ITALICO}{Cores.VERDE}Salário{Cores.RESET}, {Cores.ITALICO}{Cores.ROXO}Rendimentos{Cores.RESET}{Cores.ITALICO} | Cada traço = R$1000.00{Cores.RESET}")
-
-    linhas_conforto = []
-    linhas_rendimento = []
-
-    for pessoa in pessoas:
-        media_conforto = pessoa.conforto / len(categorias) if categorias else 0
-        conforto_barras = min(10, int(media_conforto))
-        output_conforto = f"{Cores.AZUL}{'|' * conforto_barras}{Cores.RESET}"
-        linhas_conforto.append(output_conforto.ljust(20))
-
-        rendimento_mensal = pessoa.salario + pessoa.patrimonio * 0.05
-        total_barras = min(10, int(rendimento_mensal / 1000))
-        barras_salario = min(total_barras, int(pessoa.salario / 1000))
-        barras_patrimonio = total_barras - barras_salario
-        
-        output_rendimento = f"{Cores.VERDE}{'|' * barras_salario}{Cores.ROXO}{'|' * barras_patrimonio}{Cores.RESET}"
-        linhas_rendimento.append(output_rendimento.ljust(20))
-
-    print("".join(linhas_conforto))
-    print("-"*200)
-    print("".join(linhas_rendimento))'''
 
 
 def print_pessoas(pessoas):
@@ -199,7 +172,7 @@ def print_empresas(empresas):
 
 def main():
     simular = True
-    # O loop principal agora imprime o estado atual antes de esperar o próximo comando.
+    
     while simular:
         clear()
         print("[SIMULADOR DE RELAÇÕES DE MERCADO]")
