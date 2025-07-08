@@ -19,10 +19,10 @@ def menu():
     return opcao
 
 
-def iniciar_novo_jogo(jogador_x='Jogador X',
-                      jogador_o='Jogador O',
-                      tamanho_matriz=3,
-                      tamanho_sequencia=3
+def iniciar_novo_jogo(jogador_x,
+                      jogador_o,
+                      tamanho_matriz,
+                      tamanho_sequencia
                       ):
     tabuleiro = np.full((tamanho_matriz, tamanho_matriz), '   ', dtype='<U3')
 
@@ -77,6 +77,12 @@ def imprimir_matriz(tabuleiro, tamanho_matriz):
 opcao_escolhida = menu()
 
 
+jogador_x = 'Jogador X'
+jogador_o = 'Jogador O'
+tamanho_matriz = 3
+tamanho_sequencia = 3
+
+
 # iniciar_novo_jogo()
 while opcao_escolhida != 7:
     if opcao_escolhida < 1 or opcao_escolhida > 7:
@@ -88,11 +94,11 @@ while opcao_escolhida != 7:
         opcao_escolhida = menu()
 
     elif opcao_escolhida == 2:
-        jogador_o = input('Digite o número do Jogador O')
+        jogador_o = input('Digite o número do Jogador O: ')
         opcao_escolhida = menu()
 
     elif opcao_escolhida == 3:
-        tamanho = int(input('Digite o tamanho da matriz: '))
+        tamanho_matriz = int(input('Digite o tamanho da matriz: '))
         opcao_escolhida = menu()
 
     elif opcao_escolhida == 4:
@@ -103,4 +109,5 @@ while opcao_escolhida != 7:
         pass
 
     elif opcao_escolhida == 6:
-        iniciar_novo_jogo()
+        iniciar_novo_jogo(jogador_x, jogador_o,
+                          tamanho_matriz, tamanho_sequencia)
