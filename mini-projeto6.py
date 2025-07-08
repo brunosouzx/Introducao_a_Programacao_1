@@ -1,3 +1,5 @@
+# flake8:noqa
+
 import string
 
 import numpy as np
@@ -27,9 +29,32 @@ def iniciar_novo_jogo(jogador_x='Jogador X',
     imprimir_matriz(tabuleiro, tamanho_matriz)
 
     vencedor = False
+    vez_jogador = 'X'
 
-    # while not vencedor:
-    #     pass
+    while not vencedor:
+        nome_turno = jogador_x if vez_jogador == 'X' else jogador_o
+
+        print(f'Turno do {nome_turno}')
+
+        jogada = input(
+            f'{nome_turno}, escolha sua jogada (letra e número separados por espaço): '
+        )
+
+        jogada_tuple = tuple(jogada.upper().split(' '))
+
+        linha = ord(jogada_tuple[0]) - ord('A')
+        coluna = int(jogada_tuple[1])
+
+        # Fazer algumas validações sobre os valores passados
+
+        tabuleiro[linha, coluna] = f' {vez_jogador} '
+
+        # Função para verificar se é vencedor
+        # is_vencedor()
+
+        imprimir_matriz(tabuleiro, tamanho_matriz)
+
+        vez_jogador = 'O' if vez_jogador == 'X' else 'X'
 
 
 def imprimir_matriz(tabuleiro, tamanho_matriz):
@@ -48,29 +73,34 @@ def imprimir_matriz(tabuleiro, tamanho_matriz):
         print(f" {letra_linha}|{conteudo_linha}|")
         print(linha_divisoria)
 
-# opcao_escolhida = menu()
+
+opcao_escolhida = menu()
 
 
-iniciar_novo_jogo()
-# while opcao_escolhida != 7:
-#     if opcao_escolhida < 1 or opcao_escolhida > 7:
-#         print('Escolha uma opção válida!')
-#         opcao_escolhida = menu()
+# iniciar_novo_jogo()
+while opcao_escolhida != 7:
+    if opcao_escolhida < 1 or opcao_escolhida > 7:
+        print('Escolha uma opção válida!')
+        opcao_escolhida = menu()
 
-#     elif opcao_escolhida == 1:
-#         jogador_x = input('Digite o nome do Jogador X: ')
+    elif opcao_escolhida == 1:
+        jogador_x = input('Digite o nome do Jogador X: ')
+        opcao_escolhida = menu()
 
-#     elif opcao_escolhida == 2:
-#         jogador_o = input('Digite o número do Jogador O')
+    elif opcao_escolhida == 2:
+        jogador_o = input('Digite o número do Jogador O')
+        opcao_escolhida = menu()
 
-#     elif opcao_escolhida == 3:
-#         tamanho = int(input('Digite o tamanho da matriz: '))
+    elif opcao_escolhida == 3:
+        tamanho = int(input('Digite o tamanho da matriz: '))
+        opcao_escolhida = menu()
 
-#     elif opcao_escolhida == 4:
-#         tamanho_sequencia = int(input('Digite a sequência para vencer: '))
+    elif opcao_escolhida == 4:
+        tamanho_sequencia = int(input('Digite a sequência para vencer: '))
+        opcao_escolhida = menu()
 
-#     elif opcao_escolhida == 5:
-#         pass
+    elif opcao_escolhida == 5:
+        pass
 
-#     elif opcao_escolhida == 6:
-#         iniciar_novo_jogo()
+    elif opcao_escolhida == 6:
+        iniciar_novo_jogo()
