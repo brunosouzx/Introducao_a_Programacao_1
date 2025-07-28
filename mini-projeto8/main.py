@@ -14,6 +14,7 @@ class MarketSimulatorApp:
         self.fonts = {
             "titulo": tkfont.Font(family="Calibri", size=18, weight="bold"),
             "geral": tkfont.Font(family="Calibri", size=11),
+            "label": tkfont.Font(family="Calibri", size=12, weight="bold"), # <-- FONTE ADICIONADA AQUI
             "tabela_header": tkfont.Font(family="Calibri", size=11, weight="bold"),
             "tabela_corpo": tkfont.Font(family="Calibri", size=10),
             "axis": tkfont.Font(family="Calibri", size=9),
@@ -24,7 +25,6 @@ class MarketSimulatorApp:
             "salario_bar": "#28a745", "rendimento_bar": "#800080", "conforto_bar": "#0078d7",
         }
 
-        # --- Estado da Simulação ---
         self.simulador = content.Simulador()
         self.leitor = content.Leitor()
         self.mes_atual = 0
@@ -34,7 +34,6 @@ class MarketSimulatorApp:
             return
 
         self.criar_widgets()
-        # A visualização inicial agora desenha apenas as tabelas e textos
         self.atualizar_visualizacao(desenhar_grafico=False) 
 
     def _carregar_dados(self):
@@ -49,14 +48,11 @@ class MarketSimulatorApp:
             messagebox.showerror("Erro de Arquivo", f"Arquivo não encontrado: {e.filename}")
             return False
 
-    def _initial_draw_graphs(self, event):
-        """Função chamada APENAS UMA VEZ pelo evento <Configure>."""
+    def _initial_draw_graphs(self, event=None):
         self._desenhar_graficos(self.canvas_graficos)
-        # Desvincula o evento para não ser chamado novamente em redimensionamentos
         self.canvas_graficos.unbind('<Configure>')
 
     def criar_widgets(self):
-        # ... (código dos widgets do topo continua igual)
         top_frame = tk.Frame(self.root, bg=self.colors['background'])
         top_frame.pack(fill=tk.X, padx=15, pady=(10, 5))
         tk.Label(top_frame, text="SIMULADOR DE RELAÇÕES DE MERCADO", font=self.fonts['titulo'], bg=self.colors['background'], fg=self.colors['accent']).pack()
@@ -88,8 +84,6 @@ class MarketSimulatorApp:
         self.canvas_empresas = self._criar_aba_canvas(notebook, "Empresas")
         self.canvas_graficos = self._criar_aba_canvas(notebook, "Gráficos")
 
-        # --- CORREÇÃO PRINCIPAL: VINCULA O EVENTO AO CANVAS ---
-        # A função _initial_draw_graphs será chamada quando o canvas for configurado
         self.canvas_graficos.bind('<Configure>', self._initial_draw_graphs)
 
     def _criar_aba_canvas(self, notebook, text):
@@ -105,14 +99,36 @@ class MarketSimulatorApp:
         return canvas
     
     def _criar_aba_texto(self, notebook, text):
-        frame = tk.Frame(notebook, relief=tk.SOLID, borderwidth=1)
+        # O frame principal da aba, com fundo branco
+        frame = tk.Frame(notebook, bg=self.colors['frame'], relief=tk.SOLID, borderwidth=1)
         notebook.add(frame, text=text)
-        text_widget = scrolledtext.ScrolledText(frame, font=self.fonts['tabela_corpo'], relief=tk.FLAT, wrap=tk.WORD, padx=10, pady=10)
-        text_widget.pack(fill=tk.BOTH, expand=True)
+
+        # --- CABEÇALHO ADICIONADO AQUI ---
+        header_label = tk.Label(
+            frame,
+            text="Divisão da Renda Mensal",
+            font=self.fonts['label'],
+            bg=self.colors['frame'],      # Cor de fundo branca
+            fg=self.colors['accent']       # Cor do texto azul
+        )
+        header_label.pack(pady=(10, 5)) # Adiciona um espaçamento vertical
+
+        # Área de texto com rolagem
+        text_widget = scrolledtext.ScrolledText(
+            frame,
+            font=self.fonts['tabela_corpo'],
+            relief=tk.FLAT,
+            wrap=tk.WORD,
+            padx=10,
+            pady=10,
+            bg=self.colors['frame'], # Garante que o fundo seja branco
+            fg=self.colors['text']   # Garante que o texto seja preto
+        )
+        text_widget.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
         return text_widget
 
     def _desenhar_eixo_y(self, canvas, x_pos, y_pos, height, max_value, num_ticks=5, prefix="R$ "):
-        # ... (código do eixo y continua igual)
         for i in range(num_ticks + 1):
             valor = max_value * (i / num_ticks)
             y = y_pos + height - (valor / max_value * height if max_value > 0 else 0)
@@ -122,7 +138,6 @@ class MarketSimulatorApp:
             canvas.create_text(x_pos - 10, y, text=label, anchor='e', font=self.fonts['axis'])
 
     def _desenhar_graficos(self, canvas):
-        # ... (código de desenhar os gráficos continua o mesmo)
         canvas.delete("all")
         if not self.pessoas: return
         canvas_width = canvas.winfo_width()
@@ -159,7 +174,6 @@ class MarketSimulatorApp:
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _desenhar_tabela(self, canvas, headers, data_rows, col_widths):
-        # ... (código da tabela continua igual)
         canvas.delete("all")
         row_height = 25; x_pad, y_pad = 5, 5; x, y = x_pad, y_pad
         total_width = sum(col_widths)
@@ -186,9 +200,9 @@ class MarketSimulatorApp:
         if messagebox.askokcancel("Resetar Simulação", "Tem certeza que deseja resetar todos os dados para o estado inicial?"):
             self.mes_atual = 0
             if self._carregar_dados():
-                # Re-vincula o evento para o próximo reset, caso a janela seja redimensionada
-                self.canvas_graficos.bind('<Configure>', self._initial_draw_graphs)
-                self.atualizar_visualizacao(desenhar_grafico=False)
+                # --- CORREÇÃO APLICADA AQUI ---
+                # A atualização completa é chamada, incluindo o redesenho do gráfico.
+                self.atualizar_visualizacao(desenhar_grafico=True)
                 messagebox.showinfo("Sucesso", "A simulação foi resetada.")
             else:
                 messagebox.showerror("Erro", "Não foi possível recarregar os dados para resetar.")
@@ -206,7 +220,6 @@ class MarketSimulatorApp:
         self.atualizar_visualizacao()
     
     def _atualizar_texto_categorias(self):
-        # ... (código de atualizar categorias continua igual)
         self.tab_categorias.config(state=tk.NORMAL)
         self.tab_categorias.delete('1.0', tk.END)
         texto = "Divisão da renda mensal:\n\n"; total = sum(self.categorias.values())
@@ -230,7 +243,6 @@ class MarketSimulatorApp:
         rows_e = [[e.categoria, e.nome, e.produto, f"{e.qualidade:.1f}", f"{e.margem*100:.1f}%", f"R$ {e.custo:.2f}", f"R$ {content.calc_preco(e):.2f}", f"R$ {e.vendas * e.custo * e.margem:.2f}", e.vendas] for e in self.empresas]
         self._desenhar_tabela(self.canvas_empresas, headers_e, rows_e, widths_e)
         
-        # Agora o gráfico só é redesenhado quando explicitamente instruído
         if desenhar_grafico:
             self._desenhar_graficos(self.canvas_graficos)
 
