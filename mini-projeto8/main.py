@@ -10,11 +10,11 @@ class MarketSimulatorApp:
         self.root.geometry("1200x800")
         self.root.configure(bg='#f0f0f0')
 
-        # --- Fontes e Cores ---
+        
         self.fonts = {
             "titulo": tkfont.Font(family="Calibri", size=18, weight="bold"),
             "geral": tkfont.Font(family="Calibri", size=11),
-            "label": tkfont.Font(family="Calibri", size=12, weight="bold"), # <-- FONTE ADICIONADA AQUI
+            "label": tkfont.Font(family="Calibri", size=12, weight="bold"), 
             "tabela_header": tkfont.Font(family="Calibri", size=11, weight="bold"),
             "tabela_corpo": tkfont.Font(family="Calibri", size=10),
             "axis": tkfont.Font(family="Calibri", size=9),
@@ -99,19 +99,19 @@ class MarketSimulatorApp:
         return canvas
     
     def _criar_aba_texto(self, notebook, text):
-        # O frame principal da aba, com fundo branco
+        
         frame = tk.Frame(notebook, bg=self.colors['frame'], relief=tk.SOLID, borderwidth=1)
         notebook.add(frame, text=text)
 
-        # --- CABEÇALHO ADICIONADO AQUI ---
+        
         header_label = tk.Label(
             frame,
             text="Divisão da Renda Mensal",
             font=self.fonts['label'],
-            bg=self.colors['frame'],      # Cor de fundo branca
-            fg=self.colors['accent']       # Cor do texto azul
+            bg=self.colors['frame'],     
+            fg=self.colors['accent']      
         )
-        header_label.pack(pady=(10, 5)) # Adiciona um espaçamento vertical
+        header_label.pack(pady=(10, 5)) 
 
         # Área de texto com rolagem
         text_widget = scrolledtext.ScrolledText(
@@ -121,8 +121,8 @@ class MarketSimulatorApp:
             wrap=tk.WORD,
             padx=10,
             pady=10,
-            bg=self.colors['frame'], # Garante que o fundo seja branco
-            fg=self.colors['text']   # Garante que o texto seja preto
+            bg=self.colors['frame'], 
+            fg=self.colors['text']   
         )
         text_widget.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
@@ -200,8 +200,7 @@ class MarketSimulatorApp:
         if messagebox.askokcancel("Resetar Simulação", "Tem certeza que deseja resetar todos os dados para o estado inicial?"):
             self.mes_atual = 0
             if self._carregar_dados():
-                # --- CORREÇÃO APLICADA AQUI ---
-                # A atualização completa é chamada, incluindo o redesenho do gráfico.
+                
                 self.atualizar_visualizacao(desenhar_grafico=True)
                 messagebox.showinfo("Sucesso", "A simulação foi resetada.")
             else:
